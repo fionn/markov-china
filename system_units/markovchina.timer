@@ -1,0 +1,11 @@
+# /etc/systemd/system/aqihk.timer
+
+[Unit]
+Description=Markov China Twitter bot timer
+
+[Timer]
+OnCalendar=*-*-* 12:00:00 HKT
+OnCalendar=*-*-* 19:00:00 HKT
+
+[Install]
+WantedBy=timers.target
