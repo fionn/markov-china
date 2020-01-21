@@ -54,9 +54,7 @@ def main() -> None:
     """Entry point"""
     ft = FT() # pylint: disable=invalid-name
 
-    query = "regions:China AND primaryTheme:China " \
-            "AND primarySection:Asia-Pacific AND sections:China " \
-            "AND topics:World"
+    query = "regions:China"
 
     max_results = 100
     for offset in range(0, 400, max_results):
