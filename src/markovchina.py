@@ -57,9 +57,7 @@ class Twitter:
 # pylint: disable=invalid-name
 def generate_corpus(ft: FT) -> str:
     """Gets headlines from FT"""
-    query = "regions:China AND primaryTheme:China " \
-            "AND primarySection:Asia-Pacific AND sections:China " \
-            "AND topics:World"
+    query = "regions:China"
 
     corpus = ""
     max_results = 100
