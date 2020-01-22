@@ -12,4 +12,4 @@ There are no options. Just run it directly and it'll generate a corpus, tweet on
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/fionn/markov-china)
 
-Add the remote with `git remote add remote_name https://git.heroku.com/whatever.git` and use `git push remote_name` to update the deployment.
+Add the remote with `git remote add heroku git@heroku.com:app-name.git` and use `git push heroku` to update the deployment.
