@@ -41,14 +41,13 @@ class FT:
     @staticmethod
     def titles(response: dict) -> Generator[str, None, None]:
         """Parse response for titles"""
-        try:
-            for result in response["results"][0]["results"]:
+        for result in response["results"][0]["results"]:
+            try:
                 yield result["title"]["title"]
-        except KeyError:
-            if response["results"][0]["indexCount"] == 0:
-                return
-            print(response, file=sys.stderr)
-            raise
+            except KeyError:
+                if response["results"][0]["indexCount"] == 0:
+                    return
+                continue
 
 def main() -> None:
     """Entry point"""
