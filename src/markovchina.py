@@ -20,6 +20,7 @@ class NLPText(markovify.NewlineText):
         words = re.split(self.word_split_pattern, sentence)
         return ["::".join(tag) for tag in nltk.pos_tag(words)]
 
+    # Not a static method because it's an override
     def word_join(self, words: List[str]) -> str:
         """Re-joins a list of words into a sentence"""
         return " ".join(word.split("::")[0] for word in words)
