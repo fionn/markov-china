@@ -10,7 +10,7 @@ import tweepy
 import markovify
 import nltk
 
-from ft import FT
+from news_api import NewsAPI
 
 class NLPText(markovify.NewlineText):
     """Extend markovify.NewlineText with NLP"""
@@ -24,6 +24,24 @@ class NLPText(markovify.NewlineText):
     def word_join(self, words: List[str]) -> str:
         """Re-joins a list of words into a sentence"""
         return " ".join(word.split("::")[0] for word in words)
+
+    @staticmethod
+    def _filter(sentence: str) -> bool:
+        """Remove bad sentences"""
+        if sentence.count("‘") > sentence.count("’"):
+            return False
+        if sentence.count("“") != sentence.count("”"):
+            return False
+        if sentence.count("\"") % 2 != 0:
+            return False
+        return True
+
+    def gen_sentence(self) -> str:
+        """Abstraction to make short sentences that pass filter test"""
+        while True:
+            text = self.make_short_sentence(280, state_size=1)
+            if self._filter(text):
+                return text
 
 # pylint: disable=too-few-public-methods
 class Twitter:
@@ -40,7 +58,7 @@ class Twitter:
     @staticmethod
     def _compose(model: NLPText) -> dict:
         """Compose a status dictionary compatible with api.status_update"""
-        text = model.make_short_sentence(280, state_size=1)
+        text = model.gen_sentence()
         place_id = "4797714c95971ac1" # PRC
         return {"status": text, "place_id": place_id}
 
@@ -52,27 +70,18 @@ class Twitter:
 
         if dry_run:
             return tweepy.Status
-
         return self.api.update_status(**composition)
 
-# pylint: disable=invalid-name
-def generate_corpus(ft: FT) -> str:
-    """Gets headlines from FT"""
-    query = "regions:China"
-
-    corpus = ""
-    max_results = 100
-    for offset in range(0, 400, max_results):
-        response = ft.search(query, max_results, offset)
-        corpus += "\n".join(title for title in \
-                            ft.titles(response))
-
-    return corpus
+def generate_news_api_corpus(news_api: NewsAPI) -> str:
+    """Gets headlines from News API"""
+    response = news_api.headlines("china")
+    return "\n".join(title for title in response)
 
 def main() -> None:
     """Entry point"""
-    ft = FT()
-    corpus = generate_corpus(ft)
+    news_api = NewsAPI()
+    corpus = generate_news_api_corpus(news_api)
+
     model = NLPText(corpus)
     twitter = Twitter()
     twitter.update(model)
