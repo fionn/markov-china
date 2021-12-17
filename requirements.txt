@@ -1,4 +1,4 @@
-requests == 2.23.0
-markovify == 0.8.2
+requests == 2.26.0
+markovify == 0.9.3
 nltk == 3.6.5
-tweepy == 3.8.0
+tweepy == 4.4.0

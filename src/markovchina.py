@@ -52,8 +52,7 @@ class Twitter:
                                    os.environ["API_SECRET"])
         auth.set_access_token(os.environ["ACCESS_TOKEN"],
                               os.environ["ACCESS_TOKEN_SECRET"])
-        self.api = tweepy.API(auth, wait_on_rate_limit=True,
-                              wait_on_rate_limit_notify=True)
+        self.api = tweepy.API(auth, wait_on_rate_limit=True)
 
     @staticmethod
     def _compose(model: NLPText) -> dict:
@@ -63,13 +62,13 @@ class Twitter:
         return {"status": text, "place_id": place_id}
 
     def update(self, model: NLPText,
-               dry_run: bool = False) -> tweepy.Status:
+               dry_run: bool = False) -> tweepy.models.Status:
         """Post tweet for constituency"""
         composition = self._compose(model)
         print(composition["status"], file=sys.stderr)
 
         if dry_run:
-            return tweepy.Status
+            return tweepy.models.Status
         return self.api.update_status(**composition)
 
 def generate_news_api_corpus(news_api: NewsAPI) -> str:
