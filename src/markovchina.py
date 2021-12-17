@@ -10,7 +10,6 @@ import tweepy
 import markovify
 import nltk
 
-from ft import FT
 from news_api import NewsAPI
 
 class NLPText(markovify.NewlineText):
@@ -73,20 +72,6 @@ class Twitter:
             return tweepy.Status
         return self.api.update_status(**composition)
 
-# pylint: disable=invalid-name
-def generate_ft_corpus(ft: FT) -> str:
-    """Gets headlines from FT"""
-    query = "regions:China"
-
-    corpus = ""
-    max_results = 100
-    for offset in range(0, 400, max_results):
-        response = ft.search(query, max_results, offset)
-        corpus += "\n".join(title for title in \
-                            ft.titles(response))
-
-    return corpus
-
 def generate_news_api_corpus(news_api: NewsAPI) -> str:
     """Gets headlines from News API"""
     response = news_api.headlines("china")
@@ -94,12 +79,8 @@ def generate_news_api_corpus(news_api: NewsAPI) -> str:
 
 def main() -> None:
     """Entry point"""
-    ft = FT()
     news_api = NewsAPI()
-
-    ft_corpus = generate_ft_corpus(ft)
-    news_api_corpus = generate_news_api_corpus(news_api)
-    corpus = ft_corpus + "\n" + news_api_corpus
+    corpus = generate_news_api_corpus(news_api)
 
     model = NLPText(corpus)
     twitter = Twitter()
