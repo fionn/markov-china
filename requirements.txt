@@ -1,4 +1,4 @@
-requests == 2.26.0
+requests == 2.31.0
 markovify == 0.9.3
 nltk == 3.6.5
 tweepy == 4.4.0
